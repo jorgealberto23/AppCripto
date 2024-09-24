@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { firestore } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-export default function CadastrarCriptos({ navigation }) {
+export default function CadastrarCriptos({navigation}) {
 
-    const [nomeCripto, setnomeCripto] = useState(null);
-    const [siglaCripto, setsiglaCripto] = useState(null);
-    const [valorCripto, setvalorCripto] = useState(null);
+    const [nomeCripto, setNomeCripto] = useState(null);
+    const [siglaCripto, setSiglaCripto] = useState(null);
+    const [valorCripto, setValorCripto] = useState(null);
 
     async function addCripto() {
         try {
@@ -18,7 +18,7 @@ export default function CadastrarCriptos({ navigation }) {
             });
             console.log("Cadastrado com ID: ", docRef.id);
             Alert.alert("Cadastro", "Registros cadastrados com sucesso")
-            navigation.navigate("home");
+            navigation.navigate("Home");
         } catch (error) {
             console.error("Erro ao cadastrar: ", error);
             Alert.alert("Erro", "Erro ao cadastrar . Por favor, tente novamente.");
@@ -28,19 +28,21 @@ export default function CadastrarCriptos({ navigation }) {
     return (
         <View style={estilo.container}>
             <View>
-                <Text style={estilo.titulo}>Cadastre uma nova Criptomoeda</Text>
+                <Text style={estilo.titulo}> Cadastre uma nova Criptomoeda</Text>
             </View>
-            <TextInput autoCapitalize="words" style={estilo.input} placeholder="Digite a criptomoeda" onChangeText={setNome} vaule={nome} />
-            <TextInput style={estilo.input} placeholder="Digite a Sigla" onChangeText={setSigla} vaule={sigla} />
-            <TextInput style={estilo.input} placeholder="Digite o valor" onChangeText={setValor} vaule={valor} />
+            <TextInput autoCapitalize='words' style={estilo.input} placeholder="Digite a criptomoeda" onChangeText={setNomeCripto} value={nomeCripto} />
+            <TextInput style={estilo.input} placeholder="Digite a Sigla" onChangeText={setSiglaCripto} value={siglaCripto} />
+            <TextInput style={estilo.input} placeholder="Digite o valor" onChangeText={setValorCripto} value={valorCripto} />
 
-            <TouchableOpacity style={estilo.bntenviar} onPress={() => {
-                addDiario();
-            }}>
-                <Text style={estilo.bnttxtenviar}> Enviar </Text>
+            <TouchableOpacity
+                style={estilo.btnenviar}
+                onPress={() => {
+                    addCripto();
+                }}>
+                <Text style={estilo.btntxtenviar}> Enviar </Text>
             </TouchableOpacity>
         </View>
-    )
+    );
 }
 
 const estilo = StyleSheet.create({
@@ -62,7 +64,7 @@ const estilo = StyleSheet.create({
         marginTop: 20,
     },
     btntxtenviar: {
-        fontSize25,
+        fontSize: 25,
     },
     titulo: {
         marginVertical: 40,

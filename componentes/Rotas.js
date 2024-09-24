@@ -1,11 +1,11 @@
-import { React } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Home } from "./Home"
-import { Cadastrar } from "./CadastroCriptos";
-import { Alterar } from "./AlterarCriptos";
+import Home from "./Home"
+import Cadastrar from "./CadastroCriptos";
+import Alterar from "./AlterarCriptos";
 
-const stack = createStackNavigator();
+const Stack = createStackNavigator();
 
 export default function Rotas() {
     return (

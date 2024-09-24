@@ -1,67 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from "react-native";
 import { firestore } from "../firebase";
-import { collection, onSnapshot, deleteDoc, doc, QuerySnapshot } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 
 export default function Home({ navigation }) {
 
-    const [criptos, setCriptos] = useState([])
+    const [criptos, setCriptos] = useState([]);
 
     async function deleteCripto(id) {
         try {
             await deleteDoc(doc(firestore, "tb_moeda", id))
             Alert.alert("A criptomoeda foi deletada.")
-        } catch (erro) {
-            console.erro("Erro ao deletar.", error)
+        } catch (error) {
+            console.error("Erro ao deletar.", error)
         }
     }
 
     useEffect(() => {
-        const unsubcribe = onSnapshot(collection(firestore, 'tb_moeda'), (QuerySnapshot) => {
-            QuerySnapshot.forEach(() => {
-                list.push({ ...doc.data(), id: doc.id });
-            })
+        const unsubcribe = onSnapshot(collection(firestore, 'tb_moeda'), (querySnapshot) => {
+            const lista = [];
+            querySnapshot.forEach((doc) => {
+                lista.push({ ...doc.data(), id: doc.id });
+            });
             setCriptos(lista);
-        })
+        });
         return () => unsubcribe();
     }, []);
 
     return (
-        <View>
+        <View style={estilo.container}>
             <View>
-                <Text>Lista de Criptomoedas</Text>
+                <Text style={estilo.titulo} >Lista de Criptomoedas</Text>
             </View>
             <FlatList
                 data={criptos}
                 renderItem={({ item }) => {
                     return (
-                        <View>
-                            <TouchableOpacity onPress={() => navigation.navigate("Alterar Criptos", {
+                        <View style={estilo.criptos}>
+                            <TouchableOpacity onPress={() => navigation.navigate("Alterar", {
                                 id: item.id,
                                 nomeCripto: item.nomeCripto,
                                 siglaCripto: item.siglaCripto,
                                 valorCripto: item.valorCripto
                             })}>
-                                <View>
-                                    <Text>Criptomoeda: <Text>{item.nomeCripto}</Text></Text>
-                                    <Text>Sigla: <Text>{item.siglaCripto}</Text></Text>
-                                    <Text>Valor: <Text>{item.valorCripto}</Text></Text>
+                                <View style={estilo.itens}>
+                                    <Text> Criptomoeda: <Text>{item.nomeCripto}</Text></Text>
+                                    <Text> Sigla: <Text>{item.siglaCripto}</Text></Text>
+                                    <Text> Valor: <Text>{item.valorCripto}</Text></Text>
                                 </View>
                             </TouchableOpacity>
-                            <View>
-                                <TouchableOpacity onPress={() => { deleteCripto(iten.id) }}>
-                                    X
+                            <View style={estilo.botaodeletar}>
+                                <TouchableOpacity onPress={() => { deleteCripto(item.id) }}>
+                                    <Text>X</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    )
+                    );
                 }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate("CadastarCriptos")}>
-                +
+            <TouchableOpacity onPress={() => navigation.navigate("Cadastrar")}>
+                <Text>+</Text>
             </TouchableOpacity>
         </View>
-    )
+    );
 }
 
 const estilo = StyleSheet.create({
@@ -74,7 +75,7 @@ const estilo = StyleSheet.create({
         marginTop: 50,
         fontSize: 30,
     },
-    itens: {
+    item: {
         marginHorizontal: 10,
         marginVertical: 10,
         padding: 10,
